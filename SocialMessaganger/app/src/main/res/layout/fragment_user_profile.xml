@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.UserProfile"
+    android:background="#ffffff">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ImageView
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:id="@+id/iv_fragment_userPtofile_userPhoto"
+        android:layout_gravity="left|top" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/tv_fragment_userProfile_userName"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_below="@+id/tv_fragment_userProfile_email"
+        android:layout_toRightOf="@+id/iv_fragment_userPtofile_userPhoto"
+        android:layout_toEndOf="@+id/iv_fragment_userPtofile_userPhoto" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/tv_fragment_userProfile_email"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/iv_fragment_userPtofile_userPhoto"
+        android:layout_toEndOf="@+id/iv_fragment_userPtofile_userPhoto" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/tv_fragment_userProfile_nickName"
+        android:layout_below="@+id/tv_fragment_userProfile_userName"
+        android:layout_toRightOf="@+id/iv_fragment_userPtofile_userPhoto"
+        android:layout_toEndOf="@+id/iv_fragment_userPtofile_userPhoto" />
+
+</RelativeLayout>

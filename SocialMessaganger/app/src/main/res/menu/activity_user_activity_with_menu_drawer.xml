@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/userProfile"
+            android:icon="@drawable/userss"
+            android:title="My profile" />
+        <item
+            android:id="@+id/userFriends"
+            android:icon="@drawable/friends"
+            android:title="My friends" />
+        <item
+            android:id="@+id/userMessages"
+            android:icon="@drawable/message"
+            android:title="My messages" />
+        <item
+            android:id="@+id/userSettings"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="My settings" />
+        <item
+            android:id="@+id/menuUserMao"
+            android:icon="@drawable/user"
+            android:title="Map" />
+    </group>
+
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/userLogout"
+                android:icon="@drawable/logout"
+                android:title="Logout" />
+        </menu>
+    </item>
+
+</menu>
