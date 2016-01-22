@@ -15,15 +15,10 @@ public class Splash extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
-
-
         Thread background = new Thread() {
             public void run() {
-
                 try {
-                    // Thread will sleep for 5 seconds
-                    sleep(5*1000);
-
+                    sleep(5 * 1000);
                     if (ParseUser.getCurrentUser() == null) {
                         Intent i = new Intent(getBaseContext(), Login.class);
                         startActivity(i);
@@ -31,15 +26,12 @@ public class Splash extends Activity {
                         Intent i = new Intent(getBaseContext(), UserMain.class);
                         startActivity(i);
                     }
-
                     finish();
-
                 } catch (Exception e) {
 
                 }
             }
         };
-
         background.start();
     }
 }

@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.example.roman.socialmessaganger.R;
 import com.example.roman.socialmessaganger.commondata.CommonData;
 import com.example.roman.socialmessaganger.binder.MyBinder;
+import com.example.roman.socialmessaganger.fragment.Messages;
 import com.example.roman.socialmessaganger.other.MyItemizedOverlay;
 import com.example.roman.socialmessaganger.service.MyService;
 import com.example.roman.socialmessaganger.other.UpdateActivity;
@@ -50,7 +51,8 @@ import org.osmdroid.views.overlay.OverlayItem;
 import java.util.ArrayList;
 
 public class UserMain extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, ServiceConnection, UpdateActivity {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        ServiceConnection, UpdateActivity {
 
     private MapView mapView;
     private MyItemizedOverlay myItemizedOverlay;
@@ -132,19 +134,13 @@ public class UserMain extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.user_activity_with_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -173,7 +169,13 @@ public class UserMain extends AppCompatActivity
             }
 
         } else if (id == R.id.userMessages) {
-            Toast.makeText(UserMain.this, "Messages", Toast.LENGTH_SHORT).show();
+            fragment = new Messages();
+            if (!isAddFragment) {
+                fragmentTransaction.add(R.id.frgmCont, fragment);
+                isAddFragment = true;
+            } else {
+                fragmentTransaction.replace(R.id.frgmCont, fragment);
+            }
 
         } else if (id == R.id.userSettings) {
             Toast.makeText(UserMain.this, "Settings", Toast.LENGTH_SHORT).show();
@@ -194,7 +196,6 @@ public class UserMain extends AppCompatActivity
 
     @Override
     protected void onStart() {
-
         super.onStart();
         Intent serviceIntent = new Intent(getApplicationContext(), MyService.class);
         startService(serviceIntent);
@@ -227,9 +228,7 @@ public class UserMain extends AppCompatActivity
 
 
 //    location listener
-
     private LocationListener locationListener = new LocationListener() {
-
         @Override
         public void onLocationChanged(Location location) {
             if (location != null) {
@@ -238,28 +237,23 @@ public class UserMain extends AppCompatActivity
                 user.saveInBackground();
             }
         }
-
         @Override
         public void onProviderDisabled(String provider) {
 
         }
-
         @Override
         public void onProviderEnabled(String provider) {
 
         }
-
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
-
     };
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
         this.service = ((MyBinder) service).getService();
         this.service.setActivity(this);
-        System.out.println();
     }
 
     @Override
@@ -304,5 +298,9 @@ public class UserMain extends AppCompatActivity
                 }
             });
         }
+    }
+
+    public void createMessage(View view) {
+        Toast.makeText(UserMain.this, "Create Message", Toast.LENGTH_SHORT).show();
     }
 }
