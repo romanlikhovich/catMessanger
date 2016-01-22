@@ -27,20 +27,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.roman.socialmessaganger.R;
 import com.example.roman.socialmessaganger.commondata.CommonData;
 import com.example.roman.socialmessaganger.binder.MyBinder;
+import com.example.roman.socialmessaganger.fragment.CreateMessage;
 import com.example.roman.socialmessaganger.fragment.Messages;
+import com.example.roman.socialmessaganger.fragment.Settings;
 import com.example.roman.socialmessaganger.other.MyItemizedOverlay;
 import com.example.roman.socialmessaganger.service.MyService;
 import com.example.roman.socialmessaganger.other.UpdateActivity;
 import com.example.roman.socialmessaganger.fragment.Friends;
 import com.example.roman.socialmessaganger.fragment.UserProfile;
-import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 
@@ -119,7 +119,6 @@ public class UserMain extends AppCompatActivity
         dialog.setTitle("Loading from data base");
         dialog.setMessage("Please wait");
         dialog.show();
-
     }
 
     @Override
@@ -178,7 +177,13 @@ public class UserMain extends AppCompatActivity
             }
 
         } else if (id == R.id.userSettings) {
-            Toast.makeText(UserMain.this, "Settings", Toast.LENGTH_SHORT).show();
+           fragment = new Settings();
+            if (!isAddFragment) {
+                fragmentTransaction.add(R.id.frgmCont, fragment);
+                isAddFragment = true;
+            } else {
+                fragmentTransaction.replace(R.id.frgmCont, fragment);
+            }
 
         } else if (id == R.id.userLogout) {
             ParseUser.logOut();
@@ -267,7 +272,6 @@ public class UserMain extends AppCompatActivity
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
                     items.clear();
                     mapView.getOverlays().clear();
                     mapView.getController().setZoom(12);
@@ -301,6 +305,14 @@ public class UserMain extends AppCompatActivity
     }
 
     public void createMessage(View view) {
-        Toast.makeText(UserMain.this, "Create Message", Toast.LENGTH_SHORT).show();
+        fragmentTransaction = getFragmentManager().beginTransaction();
+        fragment = new CreateMessage();
+        if (!isAddFragment) {
+            fragmentTransaction.add(R.id.frgmCont, fragment);
+            isAddFragment = true;
+        } else {
+            fragmentTransaction.replace(R.id.frgmCont, fragment);
+        }
+        fragmentTransaction.commit();
     }
 }
