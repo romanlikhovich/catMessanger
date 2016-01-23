@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,8 +42,12 @@ import com.example.roman.socialmessaganger.service.MyService;
 import com.example.roman.socialmessaganger.other.UpdateActivity;
 import com.example.roman.socialmessaganger.fragment.Friends;
 import com.example.roman.socialmessaganger.fragment.UserProfile;
+import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -157,6 +162,7 @@ public class UserMain extends AppCompatActivity
             } else {
                 fragmentTransaction.replace(R.id.frgmCont, fragment);
             }
+            mapView.setBuiltInZoomControls(false);
 
         } else if (id == R.id.userFriends) {
             fragment = new Friends();
@@ -166,6 +172,7 @@ public class UserMain extends AppCompatActivity
             } else {
                 fragmentTransaction.replace(R.id.frgmCont, fragment);
             }
+            mapView.setBuiltInZoomControls(false);
 
         } else if (id == R.id.userMessages) {
             fragment = new Messages();
@@ -175,6 +182,7 @@ public class UserMain extends AppCompatActivity
             } else {
                 fragmentTransaction.replace(R.id.frgmCont, fragment);
             }
+            mapView.setBuiltInZoomControls(false);
 
         } else if (id == R.id.userSettings) {
            fragment = new Settings();
@@ -184,6 +192,7 @@ public class UserMain extends AppCompatActivity
             } else {
                 fragmentTransaction.replace(R.id.frgmCont, fragment);
             }
+            mapView.setBuiltInZoomControls(false);
 
         } else if (id == R.id.userLogout) {
             ParseUser.logOut();
@@ -192,6 +201,7 @@ public class UserMain extends AppCompatActivity
         } else if (id == R.id.menuUserMao) {
             fragmentTransaction.remove(fragment);
         }
+        mapView.setBuiltInZoomControls(true);
         fragmentTransaction.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -304,6 +314,7 @@ public class UserMain extends AppCompatActivity
         }
     }
 
+//    button create message
     public void createMessage(View view) {
         fragmentTransaction = getFragmentManager().beginTransaction();
         fragment = new CreateMessage();
@@ -314,5 +325,35 @@ public class UserMain extends AppCompatActivity
             fragmentTransaction.replace(R.id.frgmCont, fragment);
         }
         fragmentTransaction.commit();
+    }
+
+//    button back
+    public void back(View view) {
+    }
+
+//    button send
+    public void send(View view) {
+//        eQZEkY5TEX
+//        EditText subject = (EditText) findViewById(R.id.et_fragment_createMessage_subject);
+//        EditText message = (EditText) findViewById(R.id.et_fragment_createMessage_mailText);
+//        ParseUser userTo = (ParseUser)
+//                ParseUser.createWithoutData
+//                        ("_User", CommonData.getInstance().findUserByName("RedHat").getId());
+//
+//        ParseObject newMessage = new ParseObject("Messages");
+//        newMessage.put("from", ParseUser.getCurrentUser());
+//        newMessage.put("to", userTo);
+//        newMessage.put("subject", subject.getText().toString());
+//        newMessage.put("message", message.getText().toString());
+//        newMessage.saveInBackground(new SaveCallback() {
+//            @Override
+//            public void done(ParseException e) {
+//                if (e == null) {
+//                    Toast.makeText(UserMain.this, "Message are send", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(UserMain.this, "Error", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
     }
 }

@@ -6,6 +6,20 @@ public class CommonData {
     private static CommonData ourInstance;
     private ArrayList<User> users;
     private boolean isDownload;
+    private User userWhomSendMessage;
+    private ArrayList<MyMessage> messages;
+
+    public ArrayList<MyMessage> getMessages() {
+        return messages;
+    }
+
+    public User getUserWhomSendMessage() {
+        return userWhomSendMessage;
+    }
+
+    public void setUserWhomSendMessage(User userWhomSendMessage) {
+        this.userWhomSendMessage = userWhomSendMessage;
+    }
 
     public static CommonData getInstance() {
         if (ourInstance == null) {
@@ -16,6 +30,7 @@ public class CommonData {
 
     private CommonData() {
         users = new ArrayList<>();
+        messages = new ArrayList<>();
         isDownload = false;
     }
 
@@ -36,7 +51,8 @@ public class CommonData {
         isDownload = download;
     }
 
-    public boolean isDownload () {
+    public boolean isDownload() {
         return isDownload;
     }
+
 }

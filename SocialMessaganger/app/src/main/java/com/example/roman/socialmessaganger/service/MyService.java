@@ -11,6 +11,7 @@ import com.example.roman.socialmessaganger.other.UpdateActivity;
 import com.example.roman.socialmessaganger.commondata.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -40,6 +41,15 @@ public class MyService extends Service implements Runnable {
         super.onCreate();
         new Thread(this).start();
         firstRun = true;
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (true) {
+//                    ParseQuery<ParseObject> = new ParseQuery<>()
+//                }
+//            }
+//        });
     }
 
     @Override
