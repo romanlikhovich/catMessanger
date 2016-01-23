@@ -7,11 +7,11 @@ public class MyMessage {
     private String subject;
     private String message;
     private ParseFile file;
-    private User from;
-    private User to;
+    private String from;
+    private String to;
 
     public MyMessage(String id, String subject, String message,
-                     ParseFile file, User from, User to) {
+                     ParseFile file, String from, String to) {
         this.id = id;
         this.subject = subject;
         this.message = message;
@@ -20,9 +20,8 @@ public class MyMessage {
         this.to = to;
     }
 
-    public MyMessage(String id, String subject, String message, User from, User to) {
+    public MyMessage(String id, String message, String from, String to) {
         this.id = id;
-        this.subject = subject;
         this.message = message;
         this.from = from;
         this.to = to;
@@ -60,19 +59,19 @@ public class MyMessage {
         this.file = file;
     }
 
-    public User getFrom() {
+    public String getFrom() {
         return from;
     }
 
-    public void setFrom(User from) {
+    public void setFrom(String from) {
         this.from = from;
     }
 
-    public User getTo() {
+    public String getTo() {
         return to;
     }
 
-    public void setTo(User to) {
+    public void setTo(String to) {
         this.to = to;
     }
 }

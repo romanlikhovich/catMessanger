@@ -8,9 +8,23 @@ public class CommonData {
     private boolean isDownload;
     private User userWhomSendMessage;
     private ArrayList<MyMessage> messages;
+    private boolean isMessageDownload;
+    private ArrayList<MyMessage> allMessage;
+
+    public ArrayList<MyMessage> getAllMessage() {
+        return allMessage;
+    }
 
     public ArrayList<MyMessage> getMessages() {
         return messages;
+    }
+
+    public boolean isMessageDownload() {
+        return isMessageDownload;
+    }
+
+    public void setIsMessageDownload(boolean isMessageDownload) {
+        this.isMessageDownload = isMessageDownload;
     }
 
     public User getUserWhomSendMessage() {
@@ -32,6 +46,8 @@ public class CommonData {
         users = new ArrayList<>();
         messages = new ArrayList<>();
         isDownload = false;
+        isMessageDownload = false;
+        allMessage = new ArrayList<>();
     }
 
     public ArrayList<User> getUsers() {

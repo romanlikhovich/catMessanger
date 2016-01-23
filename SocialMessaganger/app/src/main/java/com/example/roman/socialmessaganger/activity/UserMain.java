@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.example.roman.socialmessaganger.R;
 import com.example.roman.socialmessaganger.commondata.CommonData;
 import com.example.roman.socialmessaganger.binder.MyBinder;
+import com.example.roman.socialmessaganger.commondata.MyMessage;
 import com.example.roman.socialmessaganger.fragment.CreateMessage;
 import com.example.roman.socialmessaganger.fragment.Messages;
 import com.example.roman.socialmessaganger.fragment.Settings;
@@ -314,7 +315,17 @@ public class UserMain extends AppCompatActivity
         }
     }
 
-//    button create message
+    @Override
+    public void updateFragment(boolean isUpdate) {
+       runOnUiThread(new Runnable() {
+           @Override
+           public void run() {
+//               Toast.makeText(getApplicationContext(),"" +CommonData.getInstance().getMessages().size(), Toast.LENGTH_SHORT).show();
+           }
+       });
+    }
+
+    //    button create message
     public void createMessage(View view) {
         fragmentTransaction = getFragmentManager().beginTransaction();
         fragment = new CreateMessage();
@@ -333,27 +344,19 @@ public class UserMain extends AppCompatActivity
 
 //    button send
     public void send(View view) {
-//        eQZEkY5TEX
-//        EditText subject = (EditText) findViewById(R.id.et_fragment_createMessage_subject);
-//        EditText message = (EditText) findViewById(R.id.et_fragment_createMessage_mailText);
-//        ParseUser userTo = (ParseUser)
-//                ParseUser.createWithoutData
-//                        ("_User", CommonData.getInstance().findUserByName("RedHat").getId());
-//
-//        ParseObject newMessage = new ParseObject("Messages");
-//        newMessage.put("from", ParseUser.getCurrentUser());
-//        newMessage.put("to", userTo);
-//        newMessage.put("subject", subject.getText().toString());
-//        newMessage.put("message", message.getText().toString());
-//        newMessage.saveInBackground(new SaveCallback() {
-//            @Override
-//            public void done(ParseException e) {
-//                if (e == null) {
-//                    Toast.makeText(UserMain.this, "Message are send", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(UserMain.this, "Error", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
+        ParseObject newMessage = new ParseObject("Messages");
+        newMessage.put("from", ParseUser.getCurrentUser().getString("name"));
+        newMessage.put("to", CommonData.getInstance().getUserWhomSendMessage().getName());
+        newMessage.put("message","test");
+        newMessage.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(UserMain.this, "Message are send", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(UserMain.this, "Error", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
