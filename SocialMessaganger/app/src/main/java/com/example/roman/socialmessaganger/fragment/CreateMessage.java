@@ -28,9 +28,9 @@ public class CreateMessage extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 CommonData.getInstance().setUserWhomSendMessage(
                         CommonData.getInstance().getUsers().get(position));
-
+                CommonData.getInstance().setFragment(new UserWhomSendMessage());
                 FragmentTransaction trans = getActivity().getFragmentManager().beginTransaction().replace(
-                       R.id.frgmCont, new UserWhomSendMessage());
+                       R.id.frgmCont, CommonData.getInstance().getFragment());
                 trans.commit();
             }
         });

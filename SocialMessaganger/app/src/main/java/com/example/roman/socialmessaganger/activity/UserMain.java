@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -155,28 +156,29 @@ public class UserMain extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         fragmentTransaction = getFragmentManager().beginTransaction();
-        if (id == R.id.userProfile) {
-            fragment = new UserProfile();
-            if (!isAddFragment) {
-                fragmentTransaction.add(R.id.frgmCont, fragment);
-                isAddFragment = true;
-            } else {
-                fragmentTransaction.replace(R.id.frgmCont, fragment);
-            }
-            mapView.setBuiltInZoomControls(false);
+//        if (id == R.id.userProfile) {
+//            fragment = new UserProfile();
+//            if (!isAddFragment) {
+//                fragmentTransaction.add(R.id.frgmCont, fragment);
+//                isAddFragment = true;
+//            } else {
+//                fragmentTransaction.replace(R.id.frgmCont, fragment);
+//            }
+//            mapView.setBuiltInZoomControls(false);
+//
+//        } else if (id == R.id.userFriends) {
+//            fragment = new Friends();
+//            if (!isAddFragment) {
+//                fragmentTransaction.add(R.id.frgmCont, fragment);
+//                isAddFragment = true;
+//            } else {
+//                fragmentTransaction.replace(R.id.frgmCont, fragment);
+//            }
+//            mapView.setBuiltInZoomControls(false);
 
-        } else if (id == R.id.userFriends) {
-            fragment = new Friends();
-            if (!isAddFragment) {
-                fragmentTransaction.add(R.id.frgmCont, fragment);
-                isAddFragment = true;
-            } else {
-                fragmentTransaction.replace(R.id.frgmCont, fragment);
-            }
-            mapView.setBuiltInZoomControls(false);
-
-        } else if (id == R.id.userMessages) {
-            fragment = new Messages();
+//        } else
+            if (id == R.id.userMessages) {
+            fragment = new CreateMessage();
             if (!isAddFragment) {
                 fragmentTransaction.add(R.id.frgmCont, fragment);
                 isAddFragment = true;
@@ -201,6 +203,9 @@ public class UserMain extends AppCompatActivity
             finish();
         } else if (id == R.id.menuUserMao) {
             fragmentTransaction.remove(fragment);
+                if (CommonData.getInstance().getFragment() != null) {
+                    fragmentTransaction.remove(CommonData.getInstance().getFragment());
+                }
         }
         mapView.setBuiltInZoomControls(true);
         fragmentTransaction.commit();
@@ -317,12 +322,7 @@ public class UserMain extends AppCompatActivity
 
     @Override
     public void updateFragment(boolean isUpdate) {
-       runOnUiThread(new Runnable() {
-           @Override
-           public void run() {
-//               Toast.makeText(getApplicationContext(),"" +CommonData.getInstance().getMessages().size(), Toast.LENGTH_SHORT).show();
-           }
-       });
+
     }
 
     //    button create message
@@ -344,10 +344,12 @@ public class UserMain extends AppCompatActivity
 
 //    button send
     public void send(View view) {
+        EditText message = (EditText)
+                findViewById(R.id.et_fragment_userWhomSendMessage_textMessage);
         ParseObject newMessage = new ParseObject("Messages");
         newMessage.put("from", ParseUser.getCurrentUser().getString("name"));
         newMessage.put("to", CommonData.getInstance().getUserWhomSendMessage().getName());
-        newMessage.put("message","test");
+        newMessage.put("message",message.getText().toString());
         newMessage.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

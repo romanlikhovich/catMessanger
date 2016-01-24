@@ -1,5 +1,8 @@
 package com.example.roman.socialmessaganger.commondata;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+
 import java.util.ArrayList;
 
 public class CommonData {
@@ -10,6 +13,15 @@ public class CommonData {
     private ArrayList<MyMessage> messages;
     private boolean isMessageDownload;
     private ArrayList<MyMessage> allMessage;
+    private Fragment fragment;
+
+    public Fragment getFragment() {
+        return fragment;
+    }
+
+    public void setFragment(Fragment fragment) {
+        this.fragment = fragment;
+    }
 
     public ArrayList<MyMessage> getAllMessage() {
         return allMessage;
@@ -52,15 +64,6 @@ public class CommonData {
 
     public ArrayList<User> getUsers() {
         return users;
-    }
-
-    public User findUserByName(String name) {
-        for (User user : users) {
-            if (user.getUsername().equals(name)) {
-                return user;
-            }
-        }
-        return null;
     }
 
     public void setDownload(boolean download) {
