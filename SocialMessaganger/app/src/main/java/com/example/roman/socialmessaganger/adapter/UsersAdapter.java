@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.roman.socialmessaganger.R;
 import com.example.roman.socialmessaganger.commondata.CommonData;
+import com.parse.ParseUser;
 
 public class UsersAdapter extends BaseAdapter {
 
@@ -24,6 +25,12 @@ public class UsersAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+        for (int i = 0; i < CommonData.getInstance().getUsers().size(); i++) {
+            if (CommonData.getInstance().getUsers().get(i).getId().equals
+                    (ParseUser.getCurrentUser().getObjectId())) {
+                CommonData.getInstance().getUsers().remove(i);
+            }
+        }
         return CommonData.getInstance().getUsers().size();
     }
 
@@ -52,7 +59,7 @@ public class UsersAdapter extends BaseAdapter {
 //check user online status
         userName.setText(CommonData.getInstance().getUsers().get(position).getName());
          if (CommonData.getInstance().getUsers().get(position).isOnline()) {
-             userStatus.setText("online");
+             userStatus.setText("Online");
          } else {
              userStatus.setText("Not online");
          }

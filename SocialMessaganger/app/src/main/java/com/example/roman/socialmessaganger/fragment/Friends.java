@@ -20,6 +20,7 @@ public class Friends extends Fragment {
 
         ListView friendsList = (ListView) view.findViewById(R.id.lv_fragment_friends_userFriends);
         friendsList.setAdapter(adapter);
+        friendsList.invalidate();
         return view;
     }
 

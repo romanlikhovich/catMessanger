@@ -7,10 +7,12 @@ import android.os.SystemClock;
 
 import com.example.roman.socialmessaganger.binder.MyBinder;
 import com.example.roman.socialmessaganger.commondata.CommonData;
+import com.example.roman.socialmessaganger.commondata.MyMessage;
 import com.example.roman.socialmessaganger.other.UpdateActivity;
 import com.example.roman.socialmessaganger.commondata.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -40,10 +42,43 @@ public class MyService extends Service implements Runnable {
         super.onCreate();
         new Thread(this).start();
         firstRun = true;
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (true) {
+//                    SystemClock.sleep(10000);
+//                    if (ParseUser.getCurrentUser() != null) {
+//                        CommonData.getInstance().getMessages().clear();
+//                        CommonData.getInstance().setIsMessageDownload(false);
+//                        ParseQuery<ParseObject> pq = ParseQuery.getQuery("Messages");
+//                        pq.whereEqualTo("to", ParseUser.getCurrentUser().getString("name"));
+//                        pq.findInBackground(new FindCallback<ParseObject>() {
+//                            @Override
+//                            public void done(List<ParseObject> list, ParseException e) {
+//                                if (e == null) {
+//                                    for (int i = 0; i < list.size(); i++) {
+//                                        MyMessage message = new MyMessage(
+//                                                list.get(i).getObjectId(),
+//                                                list.get(i).getString("message"),
+//                                                list.get(i).getString("from"),
+//                                                list.get(i).getString("to"));
+//                                        CommonData.getInstance().getMessages().add(message);
+//                                    }
+//                                    CommonData.getInstance().setIsMessageDownload(true);
+//                                    updateFragment();
+//                                }
+//                            }
+//                        });
+//                    }
+//                }
+//            }
+//        }).start();
     }
 
     @Override
     public void onDestroy() {
+        firstRun = true;
         super.onDestroy();
     }
 
@@ -99,5 +134,9 @@ public class MyService extends Service implements Runnable {
         if (this.activity != null) {
             activity.updateActivity(CommonData.getInstance().isDownload());
         }
+    }
+
+    public void updateFragment() {
+        activity.updateFragment(CommonData.getInstance().isMessageDownload());
     }
 }
