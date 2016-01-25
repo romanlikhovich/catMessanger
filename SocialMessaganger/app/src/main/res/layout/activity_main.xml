@@ -14,9 +14,9 @@
         android:id="@+id/iv_registrationAvatar"
         android:scaleType="centerInside"
         android:src="@drawable/splash"
-        android:onClick="loadPhoto"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="56dp" />
 
     <EditText
         android:layout_width="match_parent"
@@ -25,10 +25,10 @@
         android:hint="username"
         android:ems="10"
         android:id="@+id/et_nickName"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/iv_registrationAvatar"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="96dp" />
+        android:layout_marginTop="43dp" />
 
     <EditText
         android:layout_width="match_parent"
@@ -49,7 +49,8 @@
         android:id="@+id/btn_signIn"
         android:layout_below="@+id/et_password"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:background="#2e7cd3" />
 
     <Button
         android:layout_width="wrap_content"
@@ -58,6 +59,7 @@
         android:onClick="signUp"
         android:id="@+id/btn_signUp"
         android:layout_below="@+id/et_password"
+        android:background="#2e7cd3"
         android:layout_alignRight="@+id/et_password"
         android:layout_alignEnd="@+id/et_nickName" />
 </RelativeLayout>

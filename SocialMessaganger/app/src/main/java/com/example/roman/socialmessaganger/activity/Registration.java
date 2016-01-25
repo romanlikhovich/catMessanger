@@ -46,7 +46,6 @@ public class Registration extends AppCompatActivity {
         confirmPassword = (EditText) findViewById(R.id.et_registrationConfirmPassword);
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.user);
         photo = getBytesFromBitmap(bitmap);
-        Toast.makeText(Registration.this, "" + photo.length, Toast.LENGTH_SHORT).show();
     }
 
     //    for home button arrow
@@ -107,7 +106,7 @@ public class Registration extends AppCompatActivity {
     }
 
     public void loadPhoto(View view) {
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
     }

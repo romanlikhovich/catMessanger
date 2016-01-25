@@ -10,10 +10,27 @@ public class CommonData {
     private ArrayList<User> users;
     private boolean isDownload;
     private User userWhomSendMessage;
-    private ArrayList<MyMessage> messages;
-    private boolean isMessageDownload;
     private ArrayList<MyMessage> allMessage;
     private Fragment fragment;
+    private boolean firstRun;
+    private int messageInfo;
+    private int usersInfo;
+
+    public int getUsersInfo() {
+        return usersInfo;
+    }
+
+    public void setUsersInfo(int usersInfo) {
+        this.usersInfo = usersInfo;
+    }
+
+    public int getMessageInfo() {
+        return messageInfo;
+    }
+
+    public void setMessageInfo(int messageInfo) {
+        this.messageInfo = messageInfo;
+    }
 
     public Fragment getFragment() {
         return fragment;
@@ -27,17 +44,7 @@ public class CommonData {
         return allMessage;
     }
 
-    public ArrayList<MyMessage> getMessages() {
-        return messages;
-    }
 
-    public boolean isMessageDownload() {
-        return isMessageDownload;
-    }
-
-    public void setIsMessageDownload(boolean isMessageDownload) {
-        this.isMessageDownload = isMessageDownload;
-    }
 
     public User getUserWhomSendMessage() {
         return userWhomSendMessage;
@@ -56,10 +63,11 @@ public class CommonData {
 
     private CommonData() {
         users = new ArrayList<>();
-        messages = new ArrayList<>();
         isDownload = false;
-        isMessageDownload = false;
         allMessage = new ArrayList<>();
+        firstRun = true;
+        usersInfo = 60;
+        messageInfo = 1;
     }
 
     public ArrayList<User> getUsers() {
@@ -74,4 +82,20 @@ public class CommonData {
         return isDownload;
     }
 
+    public User findUserById(String id) {
+        for (User user : users) {
+            if (user.getId().equals(id)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public boolean isFirstRun() {
+        return firstRun;
+    }
+
+    public void setFirstRun(boolean firstRun) {
+        this.firstRun = firstRun;
+    }
 }

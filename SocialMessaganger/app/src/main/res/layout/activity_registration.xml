@@ -22,6 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="sign up"
+        android:background="#2e7cd3"
         android:id="@+id/btn_registrationName"
         android:onClick="registration"
         android:layout_alignParentBottom="true"

@@ -61,7 +61,7 @@ public class UsersAdapter extends BaseAdapter {
          if (CommonData.getInstance().getUsers().get(position).isOnline()) {
              userStatus.setText("Online");
          } else {
-             userStatus.setText("Not online");
+             userStatus.setText("Offline");
          }
 //        end check status
 

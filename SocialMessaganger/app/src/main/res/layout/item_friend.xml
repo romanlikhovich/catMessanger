@@ -10,17 +10,21 @@
 
     <TextView
         android:layout_width="wrap_content"
+        android:paddingLeft="5dp"
         android:layout_height="wrap_content"
         android:text="New Text"
         android:id="@+id/tv_item_friends_userName"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/iv_item_userPhoto"
-        android:layout_toEndOf="@+id/iv_item_userPhoto" />
+        android:layout_toEndOf="@+id/iv_item_userPhoto"
+        android:textColor="#000000" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
+        android:paddingLeft="5dp"
+        android:textColor="#000000"
         android:id="@+id/tv_item_friends_status"
         android:layout_below="@+id/tv_item_friends_userName"
         android:layout_toRightOf="@+id/iv_item_userPhoto"

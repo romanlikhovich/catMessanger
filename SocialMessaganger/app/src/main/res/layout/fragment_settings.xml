@@ -1,14 +1,85 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.roman.socialmessaganger.fragment.Settings">
+    tools:context="com.example.roman.socialmessaganger.fragment.Settings"
+    android:background="#ffffff">
 
-    <!-- TODO: Update blank fragment layout -->
+
+    <ImageView
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:paddingTop="5dp"
+        android:id="@+id/iv_settingsUserPhoto"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="change photo"
+        android:onClick="changePhoto"
+        android:id="@+id/btn_settingsChangePhoto"
+        android:background="#2e7cd3"
+        android:layout_below="@+id/iv_settingsUserPhoto"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="43dp" />
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Settings"
-        android:background="#ffffff" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Refresh user information (sec)"
+        android:id="@+id/textView"
+        android:paddingLeft="5dp"
+        android:layout_below="@+id/btn_settingsChangePhoto"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="43dp"
+        android:textColor="#000000" />
 
-</FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Refresh message information (sec)"
+        android:id="@+id/textView2"
+        android:paddingLeft="5dp"
+        android:textColor="#000000"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="47dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="5dp"
+        android:inputType="numberSigned"
+        android:text="60"
+        android:ems="10"
+        android:id="@+id/et_settings_userInfo"
+        android:layout_above="@+id/textView2"
+        android:layout_toEndOf="@+id/btn_settingsChangePhoto"
+        android:layout_toRightOf="@+id/btn_settingsChangePhoto" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberSigned"
+        android:ems="10"
+        android:text="3"
+        android:paddingRight="5dp"
+        android:id="@+id/et_settings_messageInfo"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_toEndOf="@+id/btn_settingsChangePhoto"
+        android:layout_toRightOf="@+id/btn_settingsChangePhoto" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="save"
+        android:onClick="save"
+        android:id="@+id/btn_settingsSave"
+        android:background="#2e7cd3"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>
