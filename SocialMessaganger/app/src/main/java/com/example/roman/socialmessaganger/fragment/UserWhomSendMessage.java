@@ -1,6 +1,7 @@
 package com.example.roman.socialmessaganger.fragment;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -33,7 +34,8 @@ public class UserWhomSendMessage extends Fragment implements Runnable {
     private View view;
     private Thread myThread;
     private boolean isRunThread;
-    AlertDialog.Builder ad;
+    private AlertDialog.Builder ad;
+    private ProgressDialog dialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,17 +47,18 @@ public class UserWhomSendMessage extends Fragment implements Runnable {
     public void onStart() {
         super.onStart();
         ad = new AlertDialog.Builder(this.getActivity());
+        dialog = new ProgressDialog(getActivity());
+        dialog.setTitle("Please wait");
+        dialog.setMessage("Loading");
+        dialog.show();
         isRunThread = true;
-        TextView userName =
-                (TextView) view.findViewById(R.id.tv_fragment_userWhomSendMessage_username);
-        userName.setText(CommonData.getInstance().getUserWhomSendMessage().getName());
         listView = (ListView) view.findViewById(R.id.lv_fragmentWhomSendMessage_messages);
         adapter = new MessagesAdapter(getActivity().getApplicationContext());
+        listView.setAdapter(adapter);
         myThread = new Thread(this);
         myThread.start();
-
         listView.setLongClickable(true);
-
+        listView.setAdapter(adapter);
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -84,7 +87,6 @@ public class UserWhomSendMessage extends Fragment implements Runnable {
             queries.add(query2);
             ParseQuery<ParseObject> mainQuery = ParseQuery.or(queries);
             mainQuery.orderByDescending("createdAt");
-
             mainQuery.findInBackground(new FindCallback<ParseObject>() {
                 @Override
                 public void done(List<ParseObject> list, ParseException e) {
@@ -96,7 +98,7 @@ public class UserWhomSendMessage extends Fragment implements Runnable {
                                     list.get(i).getString("message"),
                                     list.get(i).getString("from"),
                                     list.get(i).getString("to"));
-                            CommonData.getInstance().getAllMessage().add(message);
+                            CommonData.getInstance().getAllMessage().add(0,message);
                         }
                         if (getActivity() == null) {
                             return;
@@ -104,8 +106,8 @@ public class UserWhomSendMessage extends Fragment implements Runnable {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                listView.setAdapter(adapter);
-                                listView.invalidate();
+                                listView.invalidateViews();
+                                dialog.dismiss();
                             }
                         });
                     }
@@ -137,7 +139,7 @@ public class UserWhomSendMessage extends Fragment implements Runnable {
                     public void done(ParseException e) {
                         if (e == null) {
                             CommonData.getInstance().getAllMessage().remove(position);
-                            listView.invalidate();
+                            listView.invalidateViews();
                             Toast.makeText(getActivity(), "Message are delete ", Toast.LENGTH_SHORT).show();
                         }
                     }

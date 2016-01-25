@@ -107,6 +107,7 @@ public class UserMain extends AppCompatActivity
         }
             navigationView.addHeaderView(header);
         ((TextView) header.findViewById(R.id.tv_header_userName)).setText(user.getString("name"));
+        ((TextView) header.findViewById(R.id.tv_header_userEmail)).setText(user.getEmail());
         navigationView.removeHeaderView(navigationView.getHeaderView(0));
 //        end userPhoto
 
@@ -228,6 +229,8 @@ public class UserMain extends AppCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
+        Intent serviceIntent = new Intent(getApplicationContext(), MyService.class);
+        stopService(serviceIntent);
         unbindService(this);
         user.put("online", false);
         user.saveInBackground();
@@ -299,7 +302,7 @@ public class UserMain extends AppCompatActivity
                             GeoPoint userPoint =
                                     CommonData.getInstance().getUsers().get(i).getLocation();
                             OverlayItem userItem = new OverlayItem(
-                                    CommonData.getInstance().getUsers().get(i).getName(),
+                                    CommonData.getInstance().getUsers().get(i).getId(),
                                     "", userPoint);
                             items.add(userItem);
                         } else {
@@ -354,7 +357,7 @@ public class UserMain extends AppCompatActivity
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Toast.makeText(UserMain.this, "Message are send", Toast.LENGTH_SHORT).show();
+
                 } else {
                     Toast.makeText(UserMain.this, "Error", Toast.LENGTH_SHORT).show();
                 }

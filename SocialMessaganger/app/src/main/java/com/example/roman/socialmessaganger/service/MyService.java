@@ -41,46 +41,10 @@ public class MyService extends Service implements Runnable {
     public void onCreate() {
         super.onCreate();
         new Thread(this).start();
-        firstRun = true;
-
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while (true) {
-//                    SystemClock.sleep(10000);
-//                    if (ParseUser.getCurrentUser() != null) {
-//                        CommonData.getInstance().getMessages().clear();
-//                        CommonData.getInstance().setIsMessageDownload(false);
-//                        ParseQuery<ParseObject> pq = ParseQuery.getQuery("Messages");
-//                        pq.whereEqualTo("to", ParseUser.getCurrentUser().getString("name"));
-//                        pq.findInBackground(new FindCallback<ParseObject>() {
-//                            @Override
-//                            public void done(List<ParseObject> list, ParseException e) {
-//                                if (e == null) {
-//                                    for (int i = 0; i < list.size(); i++) {
-//                                        MyMessage message = new MyMessage(
-//                                                list.get(i).getObjectId(),
-//                                                list.get(i).getString("message"),
-//                                                list.get(i).getString("from"),
-//                                                list.get(i).getString("to"));
-//                                        CommonData.getInstance().getMessages().add(message);
-//                                    }
-//                                    CommonData.getInstance().setIsMessageDownload(true);
-//                                    updateFragment();
-//                                }
-//                            }
-//                        });
-//                    }
-//                }
-//            }
-//        }).start();
+       CommonData.getInstance().setFirstRun(true);
     }
 
-    @Override
-    public void onDestroy() {
-        firstRun = true;
-        super.onDestroy();
-    }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -91,7 +55,7 @@ public class MyService extends Service implements Runnable {
     @Override
     public void run() {
         while (ParseUser.getCurrentUser() !=null){
-            if (firstRun) {
+            if (CommonData.getInstance().isFirstRun()) {
                 SystemClock.sleep(1000);
             }
 //            download information from parse one on minute or in settings time;
@@ -124,7 +88,7 @@ public class MyService extends Service implements Runnable {
                         }
                     }
             );
-            firstRun = false;
+            CommonData.getInstance().setFirstRun(false);
             SystemClock.sleep(60000);
         }
     }
@@ -134,9 +98,5 @@ public class MyService extends Service implements Runnable {
         if (this.activity != null) {
             activity.updateActivity(CommonData.getInstance().isDownload());
         }
-    }
-
-    public void updateFragment() {
-        activity.updateFragment(CommonData.getInstance().isMessageDownload());
     }
 }

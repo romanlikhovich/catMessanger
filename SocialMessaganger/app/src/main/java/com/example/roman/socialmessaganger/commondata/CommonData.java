@@ -10,10 +10,9 @@ public class CommonData {
     private ArrayList<User> users;
     private boolean isDownload;
     private User userWhomSendMessage;
-    private ArrayList<MyMessage> messages;
-    private boolean isMessageDownload;
     private ArrayList<MyMessage> allMessage;
     private Fragment fragment;
+    private boolean firstRun;
 
     public Fragment getFragment() {
         return fragment;
@@ -27,17 +26,7 @@ public class CommonData {
         return allMessage;
     }
 
-    public ArrayList<MyMessage> getMessages() {
-        return messages;
-    }
 
-    public boolean isMessageDownload() {
-        return isMessageDownload;
-    }
-
-    public void setIsMessageDownload(boolean isMessageDownload) {
-        this.isMessageDownload = isMessageDownload;
-    }
 
     public User getUserWhomSendMessage() {
         return userWhomSendMessage;
@@ -56,10 +45,9 @@ public class CommonData {
 
     private CommonData() {
         users = new ArrayList<>();
-        messages = new ArrayList<>();
         isDownload = false;
-        isMessageDownload = false;
         allMessage = new ArrayList<>();
+        firstRun = true;
     }
 
     public ArrayList<User> getUsers() {
@@ -74,4 +62,20 @@ public class CommonData {
         return isDownload;
     }
 
+    public User findUserById(String id) {
+        for (User user : users) {
+            if (user.getId().equals(id)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public boolean isFirstRun() {
+        return firstRun;
+    }
+
+    public void setFirstRun(boolean firstRun) {
+        this.firstRun = firstRun;
+    }
 }
