@@ -72,7 +72,7 @@ public class UserWhomSendMessage extends Fragment implements Runnable {
     @Override
     public void run() {
         while (isRunThread) {
-            SystemClock.sleep(1000);
+            SystemClock.sleep(CommonData.getInstance().getMessageInfo() * 1000);
 
             ParseQuery query1 = new ParseQuery("Messages");
             query1.whereEqualTo("to", ParseUser.getCurrentUser().getString("name"));

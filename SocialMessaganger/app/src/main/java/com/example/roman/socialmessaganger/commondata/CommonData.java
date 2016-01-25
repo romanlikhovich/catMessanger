@@ -13,6 +13,24 @@ public class CommonData {
     private ArrayList<MyMessage> allMessage;
     private Fragment fragment;
     private boolean firstRun;
+    private int messageInfo;
+    private int usersInfo;
+
+    public int getUsersInfo() {
+        return usersInfo;
+    }
+
+    public void setUsersInfo(int usersInfo) {
+        this.usersInfo = usersInfo;
+    }
+
+    public int getMessageInfo() {
+        return messageInfo;
+    }
+
+    public void setMessageInfo(int messageInfo) {
+        this.messageInfo = messageInfo;
+    }
 
     public Fragment getFragment() {
         return fragment;
@@ -48,6 +66,8 @@ public class CommonData {
         isDownload = false;
         allMessage = new ArrayList<>();
         firstRun = true;
+        usersInfo = 60;
+        messageInfo = 1;
     }
 
     public ArrayList<User> getUsers() {

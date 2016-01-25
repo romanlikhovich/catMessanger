@@ -5,16 +5,20 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -36,6 +40,7 @@ import com.example.roman.socialmessaganger.R;
 import com.example.roman.socialmessaganger.commondata.CommonData;
 import com.example.roman.socialmessaganger.binder.MyBinder;
 import com.example.roman.socialmessaganger.commondata.MyMessage;
+import com.example.roman.socialmessaganger.commondata.User;
 import com.example.roman.socialmessaganger.fragment.CreateMessage;
 import com.example.roman.socialmessaganger.fragment.Messages;
 import com.example.roman.socialmessaganger.fragment.Settings;
@@ -44,7 +49,9 @@ import com.example.roman.socialmessaganger.service.MyService;
 import com.example.roman.socialmessaganger.other.UpdateActivity;
 import com.example.roman.socialmessaganger.fragment.Friends;
 import com.example.roman.socialmessaganger.fragment.UserProfile;
+import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -55,12 +62,15 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.OverlayItem;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserMain extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         ServiceConnection, UpdateActivity {
-
+    private ImageView userPhoto;
     private MapView mapView;
     private MyItemizedOverlay myItemizedOverlay;
     private ProgressDialog dialog;
@@ -71,7 +81,9 @@ public class UserMain extends AppCompatActivity
     private boolean isAddFragment;
     private FragmentTransaction fragmentTransaction;
     private Fragment fragment;
-
+    private static final int GALLERY_REQUEST = 1;
+    private byte[] photo;
+    private SharedPreferences settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,13 +117,13 @@ public class UserMain extends AppCompatActivity
         } else {
             ((ImageView) header.findViewById(R.id.iv_header_userPhoto)).setImageBitmap(bitmap);
         }
-            navigationView.addHeaderView(header);
+        navigationView.addHeaderView(header);
         ((TextView) header.findViewById(R.id.tv_header_userName)).setText(user.getString("name"));
         ((TextView) header.findViewById(R.id.tv_header_userEmail)).setText(user.getEmail());
         navigationView.removeHeaderView(navigationView.getHeaderView(0));
 //        end userPhoto
 
-
+        settings = getSharedPreferences("settings", Context.MODE_PRIVATE);
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -178,7 +190,7 @@ public class UserMain extends AppCompatActivity
 //            mapView.setBuiltInZoomControls(false);
 
 //        } else
-            if (id == R.id.userMessages) {
+        if (id == R.id.userMessages) {
             fragment = new CreateMessage();
             if (!isAddFragment) {
                 fragmentTransaction.add(R.id.frgmCont, fragment);
@@ -189,7 +201,7 @@ public class UserMain extends AppCompatActivity
             mapView.setBuiltInZoomControls(false);
 
         } else if (id == R.id.userSettings) {
-           fragment = new Settings();
+            fragment = new Settings();
             if (!isAddFragment) {
                 fragmentTransaction.add(R.id.frgmCont, fragment);
                 isAddFragment = true;
@@ -204,9 +216,9 @@ public class UserMain extends AppCompatActivity
             finish();
         } else if (id == R.id.menuUserMao) {
             fragmentTransaction.remove(fragment);
-                if (CommonData.getInstance().getFragment() != null) {
-                    fragmentTransaction.remove(CommonData.getInstance().getFragment());
-                }
+            if (CommonData.getInstance().getFragment() != null) {
+                fragmentTransaction.remove(CommonData.getInstance().getFragment());
+            }
         }
         mapView.setBuiltInZoomControls(true);
         fragmentTransaction.commit();
@@ -219,6 +231,14 @@ public class UserMain extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+        String usersInfo;
+        String messagesInfo;
+        if (settings.contains("messagesInfo") && settings.contains("usersInfo")) {
+            messagesInfo = settings.getString("messagesInfo", "");
+            usersInfo = settings.getString("usersInfo", "");
+            CommonData.getInstance().setMessageInfo(Integer.parseInt(messagesInfo));
+            CommonData.getInstance().setUsersInfo(Integer.parseInt(usersInfo));
+        }
         Intent serviceIntent = new Intent(getApplicationContext(), MyService.class);
         startService(serviceIntent);
         bindService(serviceIntent, this, 0);
@@ -251,7 +271,7 @@ public class UserMain extends AppCompatActivity
     }
 
 
-//    location listener
+    //    location listener
     private LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
@@ -261,14 +281,17 @@ public class UserMain extends AppCompatActivity
                 user.saveInBackground();
             }
         }
+
         @Override
         public void onProviderDisabled(String provider) {
 
         }
+
         @Override
         public void onProviderEnabled(String provider) {
 
         }
+
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
@@ -341,27 +364,135 @@ public class UserMain extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-//    button back
+    //    button back
     public void back(View view) {
     }
 
-//    button send
+    //    button send
     public void send(View view) {
-        EditText message = (EditText)
+        final EditText message = (EditText)
                 findViewById(R.id.et_fragment_userWhomSendMessage_textMessage);
         ParseObject newMessage = new ParseObject("Messages");
         newMessage.put("from", ParseUser.getCurrentUser().getString("name"));
         newMessage.put("to", CommonData.getInstance().getUserWhomSendMessage().getName());
-        newMessage.put("message",message.getText().toString());
+        newMessage.put("message", message.getText().toString());
         newMessage.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-
+                    message.setText("");
                 } else {
                     Toast.makeText(UserMain.this, "Error", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    public void changePhoto(View view) {
+        userPhoto = (ImageView) findViewById(R.id.iv_settingsUserPhoto);
+        Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Bitmap bitmap = null;
+
+        switch (requestCode) {
+            case GALLERY_REQUEST:
+                if (resultCode == RESULT_OK) {
+                    Uri selectedImage = data.getData();
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                        photo = getBytesFromBitmap(bitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    userPhoto.setImageBitmap(bitmap);
+                }
+        }
+    }
+
+    public byte[] getBytesFromBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        return stream.toByteArray();
+    }
+
+    public void save(View view) {
+        if (photo != null) {
+            final ParseFile photoFile = new ParseFile("photo.jpg", photo);
+            photoFile.saveInBackground();
+
+            ParseUser user = ParseUser.getCurrentUser();
+            user.put("userphoto", photoFile);
+            user.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        CommonData.getInstance().getUsers().clear();
+                        ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+                        userQuery.findInBackground(
+                                new FindCallback<ParseUser>() {
+                                    @Override
+                                    public void done(List<ParseUser> list, ParseException e) {
+                                        if (e == null) {
+                                            for (ParseUser users : list) {
+                                                CommonData.getInstance().getUsers().add(
+                                                        new User(users.getObjectId(),
+                                                                users.getUsername(),
+                                                                users.getString("name"),
+                                                                users.getEmail(),
+                                                                users.getBoolean("online"),
+                                                                new GeoPoint(
+                                                                        users.getParseGeoPoint(
+                                                                                "location").getLatitude(),
+                                                                        users.getParseGeoPoint(
+                                                                                "location").getLongitude()),
+                                                                users.getParseFile("userphoto")));
+                                            }
+
+                                            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                                            //        user photo to header menu
+                                            View header = LayoutInflater.from(UserMain.this).inflate(
+                                                    R.layout.nav_header_user_activity_with_menu, null);
+                                            Bitmap bitmap = null;
+                                            try {
+                                                bitmap = BitmapFactory.decodeFile(ParseUser.getCurrentUser().getParseFile("userphoto").getFile().getPath());
+                                            } catch (Exception ee) {
+                                                ee.printStackTrace();
+                                            }
+                                            if (bitmap == null) {
+                                                ((ImageView) header.findViewById(
+                                                        R.id.iv_header_userPhoto)).setImageResource(R.drawable.user);
+                                            } else {
+                                                ((ImageView) header.findViewById(R.id.iv_header_userPhoto)).setImageBitmap(bitmap);
+                                            }
+                                            navigationView.addHeaderView(header);
+                                            ((TextView) header.findViewById(R.id.tv_header_userName)).setText(ParseUser.getCurrentUser().getString("name"));
+                                            ((TextView) header.findViewById(R.id.tv_header_userEmail)).setText(ParseUser.getCurrentUser().getEmail());
+                                            navigationView.removeHeaderView(navigationView.getHeaderView(0));
+                                        }
+                                    }
+                                }
+                        );
+                    }
+                }
+            });
+        }
+
+        EditText usersInfo = (EditText) findViewById(R.id.et_settings_userInfo);
+        EditText messagesInfo = (EditText) findViewById(R.id.et_settings_messageInfo);
+
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("messagesInfo", messagesInfo.getText().toString());
+        editor.putString("usersInfo", usersInfo.getText().toString());
+        CommonData.getInstance().setMessageInfo(Integer.parseInt(messagesInfo.getText().toString()));
+        CommonData.getInstance().setUsersInfo(Integer.parseInt(usersInfo.getText().toString()));
+        editor.apply();
+
+        Toast.makeText(UserMain.this, "Settings are saved", Toast.LENGTH_SHORT).show();
     }
 }

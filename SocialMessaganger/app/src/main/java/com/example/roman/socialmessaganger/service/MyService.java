@@ -89,7 +89,7 @@ public class MyService extends Service implements Runnable {
                     }
             );
             CommonData.getInstance().setFirstRun(false);
-            SystemClock.sleep(60000);
+            SystemClock.sleep(CommonData.getInstance().getUsersInfo()*1000);
         }
     }
 
