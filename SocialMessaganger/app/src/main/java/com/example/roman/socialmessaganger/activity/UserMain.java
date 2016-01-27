@@ -211,11 +211,15 @@ public class UserMain extends AppCompatActivity
             mapView.setBuiltInZoomControls(false);
 
         } else if (id == R.id.userLogout) {
+            user.put("online", false);
+            user.saveInBackground();
             ParseUser.logOut();
             startActivity(new Intent(this, Login.class));
             finish();
         } else if (id == R.id.menuUserMao) {
-            fragmentTransaction.remove(fragment);
+            if (fragment!= null) {
+                fragmentTransaction.remove(fragment);
+            }
             if (CommonData.getInstance().getFragment() != null) {
                 fragmentTransaction.remove(CommonData.getInstance().getFragment());
             }
