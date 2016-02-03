@@ -9,8 +9,8 @@ public class MessagerApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Parse.initialize(this, "Sanz9JfGOG1xneTTDLZPGedOsBWEbQ15kJ13Pfsi",
-                "kraqHLb0wSTFkDDFQ7Y4Jxb2hgwdEVsUwF5D0Ftt");
+        Parse.initialize(this, "Ht1RrrFkfLD1aWtNNHbiseJXMhw2fFz7Bi34qnQd",
+                "ffAM9snIxMZIyFqX13tf6gdYJ0CS5ccknrkF98NA");
         ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 }
